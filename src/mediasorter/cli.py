@@ -201,6 +201,49 @@ def scan(
             console.print("\n[dim]No files ready to move.[/dim]")
 
 
+@app.command(name="check-upcoming")
+def check_upcoming(
+    notify: bool = typer.Option(False, "--notify", help="Send webhook notifications"),
+    config: Optional[Path] = typer.Option(None, "--config", "-c", help="Path to config file"),
+    json_output: bool = typer.Option(False, "--json", help="Machine-readable JSON output"),
+):
+    """Query TMDB for upcoming episodes of tracked shows."""
+    import json as json_mod
+
+    from mediasorter.config import load_config
+    from mediasorter.db.engine import create_tables, get_engine
+    from mediasorter.logging import configure_logging
+    from mediasorter.matching.tmdb_client import CachedTMDBClient, TMDBClient
+    from mediasorter.notifications.upcoming import UpcomingTracker
+    from mediasorter.utils.rate_limit import TokenBucket
+
+    configure_logging()
+    cfg = load_config(config)
+    engine = get_engine()
+    create_tables(engine)
+
+    client = TMDBClient(cfg.tmdb, TokenBucket())
+    cached = CachedTMDBClient(client, engine, cfg.tmdb.cache_ttl_days)
+    tracker = UpcomingTracker(cfg, cached, engine)
+
+    upcoming = tracker.check_upcoming(notify=notify)
+
+    if json_output:
+        typer.echo(json_mod.dumps(upcoming, indent=2))
+    else:
+        if not upcoming:
+            console.print("[dim]No upcoming episodes found.[/dim]")
+        else:
+            for ep in upcoming:
+                status = "[dim](notified)[/dim]" if ep.get("already_notified") else ""
+                console.print(
+                    f"  [bold]{ep['show_title']}[/bold] "
+                    f"S{ep['season']:02d}E{ep['episode']:02d} "
+                    f"- {ep.get('episode_name', '')} "
+                    f"[dim]({ep['air_date']})[/dim] {status}"
+                )
+
+
 @app.command()
 def status(
     config: Optional[Path] = typer.Option(None, "--config", "-c", help="Path to config file"),

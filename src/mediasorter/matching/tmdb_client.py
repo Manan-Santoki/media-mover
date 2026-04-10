@@ -52,13 +52,16 @@ class TMDBClient:
         self._config = config
 
     def search_movie(self, title: str, year: int | None = None) -> list[TMDBResult]:
-        """Search TMDB for movies. Tries with year first, falls back without."""
+        """Search TMDB for movies. Includes year in query for better results."""
         self._limiter.acquire()
         try:
-            results = self._movie.search(title, year=year) if year else self._movie.search(title)
+            # tmdbv3api Movie.search only accepts (term, page)
+            # Append year to search term for better precision
+            query = f"{title} {year}" if year else title
+            results = self._movie.search(query)
             items = self._convert_results(results, "movie")
 
-            # If year search returned nothing, retry without year
+            # If year-appended search returned nothing, retry without year
             if not items and year:
                 self._limiter.acquire()
                 results = self._movie.search(title)
@@ -70,13 +73,12 @@ class TMDBClient:
             return []
 
     def search_tv(self, title: str, year: int | None = None) -> list[TMDBResult]:
-        """Search TMDB for TV shows. Tries with year first, falls back without."""
+        """Search TMDB for TV shows. Includes year in query for disambiguation."""
         self._limiter.acquire()
         try:
-            if year:
-                results = self._tv.search(title, first_air_date_year=year)
-            else:
-                results = self._tv.search(title)
+            # tmdbv3api TV.search only accepts (term, page)
+            query = f"{title} {year}" if year else title
+            results = self._tv.search(query)
             items = self._convert_results(results, "tv")
 
             if not items and year:

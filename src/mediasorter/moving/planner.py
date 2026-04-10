@@ -352,14 +352,29 @@ class ScanPlanner:
                 if plan.parsed is None:
                     continue
 
-                mf = MediaFile(
-                    source_path=str(plan.source),
-                    file_size=plan.source.stat().st_size if plan.source.exists() else 0,
-                    media_type=plan.media_type,
-                    run_id=run_id,
-                )
-                session.add(mf)
-                session.flush()
+                # Upsert: check if file already exists in DB
+                existing = session.exec(
+                    select(MediaFile).where(MediaFile.source_path == str(plan.source))
+                ).first()
+
+                if existing:
+                    existing.media_type = plan.media_type
+                    existing.run_id = run_id
+                    existing.updated_at = datetime.now()
+                    if plan.source.exists():
+                        existing.file_size = plan.source.stat().st_size
+                    session.add(existing)
+                    session.flush()
+                    mf = existing
+                else:
+                    mf = MediaFile(
+                        source_path=str(plan.source),
+                        file_size=plan.source.stat().st_size if plan.source.exists() else 0,
+                        media_type=plan.media_type,
+                        run_id=run_id,
+                    )
+                    session.add(mf)
+                    session.flush()
 
                 pr = ParseResult(
                     media_file_id=mf.id,

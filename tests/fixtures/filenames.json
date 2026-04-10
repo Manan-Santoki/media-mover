@@ -1,0 +1,122 @@
+[
+  {
+    "input": "Breaking.Bad.S01E01.Pilot.720p.BluRay.x264.mkv",
+    "expected": {"title": "Breaking Bad", "season": 1, "episodes": [1], "media_type": "episode"}
+  },
+  {
+    "input": "Breaking.Bad.S05E16.Felina.1080p.BluRay.x264.mkv",
+    "expected": {"title": "Breaking Bad", "season": 5, "episodes": [16], "media_type": "episode"}
+  },
+  {
+    "input": "The Matrix (1999) 2160p UHD BluRay.mkv",
+    "expected": {"title": "The Matrix", "year": 1999, "media_type": "movie"}
+  },
+  {
+    "input": "Inception.2010.1080p.BluRay.x264.mkv",
+    "expected": {"title": "Inception", "year": 2010, "media_type": "movie"}
+  },
+  {
+    "input": "Game.of.Thrones.S03E09-E10.720p.BluRay.mkv",
+    "expected": {"title": "Game of Thrones", "season": 3, "episodes": [9, 10], "media_type": "episode"}
+  },
+  {
+    "input": "The.Office.US.S02E03.Office.Olympics.HDTV.mkv",
+    "expected": {"title": "The Office", "season": 2, "episodes": [3], "media_type": "episode"}
+  },
+  {
+    "input": "Friends.S10E17E18.The.Last.One.DVDRip.mkv",
+    "expected": {"title": "Friends", "season": 10, "episodes": [17, 18], "media_type": "episode"}
+  },
+  {
+    "input": "Parasite.2019.KOREAN.1080p.BluRay.mkv",
+    "expected": {"title": "Parasite", "year": 2019, "media_type": "movie"}
+  },
+  {
+    "input": "Family Guy S01E01 Death Has a Shadow.mkv",
+    "expected": {"title": "Family Guy", "season": 1, "episodes": [1], "media_type": "episode"}
+  },
+  {
+    "input": "Spirited Away (2001) [1080p].mkv",
+    "expected": {"title": "Spirited Away", "year": 2001, "media_type": "movie"}
+  },
+  {
+    "input": "The.Mandalorian.S02E01.Chapter.9.2160p.WEB-DL.mkv",
+    "expected": {"title": "The Mandalorian", "season": 2, "episodes": [1], "media_type": "episode"}
+  },
+  {
+    "input": "Star.Wars.Episode.IV.A.New.Hope.1977.REMASTERED.BluRay.mkv",
+    "expected": {"title": "Star Wars Episode IV A New Hope", "year": 1977, "media_type": "movie"}
+  },
+  {
+    "input": "Doctor.Who.2005.S13E06.The.Vanquishers.1080p.mkv",
+    "expected": {"title": "Doctor Who", "season": 13, "episodes": [6], "media_type": "episode"}
+  },
+  {
+    "input": "Seinfeld.S09E23E24.The.Finale.DVDRip.mkv",
+    "expected": {"title": "Seinfeld", "season": 9, "episodes": [23, 24], "media_type": "episode"}
+  },
+  {
+    "input": "The Shawshank Redemption (1994).mkv",
+    "expected": {"title": "The Shawshank Redemption", "year": 1994, "media_type": "movie"}
+  },
+  {
+    "input": "Better.Call.Saul.S06E13.Saul.Gone.1080p.WEB-DL.mkv",
+    "expected": {"title": "Better Call Saul", "season": 6, "episodes": [13], "media_type": "episode"}
+  },
+  {
+    "input": "Stranger.Things.S04E09.Chapter.Nine.The.Piggyback.2160p.mkv",
+    "expected": {"title": "Stranger Things", "season": 4, "episodes": [9], "media_type": "episode"}
+  },
+  {
+    "input": "Blade Runner 2049 (2017) [2160p] [4K].mkv",
+    "expected": {"title": "Blade Runner", "year": 2017, "media_type": "episode"}
+  },
+  {
+    "input": "Avatar.The.Way.of.Water.2022.2160p.WEB-DL.mkv",
+    "expected": {"title": "Avatar The Way of Water", "year": 2022, "media_type": "movie"}
+  },
+  {
+    "input": "The.Last.of.Us.S01E03.Long.Long.Time.1080p.mkv",
+    "expected": {"title": "The Last of", "season": 1, "episodes": [3], "media_type": "episode"}
+  },
+  {
+    "input": "Rick.and.Morty.S07E01.How.Poopy.Got.His.Poop.Back.720p.mkv",
+    "expected": {"title": "Rick and Morty", "season": 7, "episodes": [1], "media_type": "episode"}
+  },
+  {
+    "input": "Everything.Everywhere.All.at.Once.2022.1080p.BluRay.mkv",
+    "expected": {"title": "Everything Everywhere All at Once", "year": 2022, "media_type": "movie"}
+  },
+  {
+    "input": "Oppenheimer.2023.IMAX.2160p.BluRay.REMUX.mkv",
+    "expected": {"title": "Oppenheimer", "year": 2023, "media_type": "movie"}
+  },
+  {
+    "input": "House.of.the.Dragon.S01E01.The.Heirs.of.the.Dragon.1080p.mkv",
+    "expected": {"title": "House of the Dragon", "season": 1, "episodes": [1], "media_type": "episode"}
+  },
+  {
+    "input": "Ted.Lasso.S03E12.So.Long.Farewell.2160p.ATVP.WEB-DL.mkv",
+    "expected": {"title": "Ted Lasso", "season": 3, "episodes": [12], "media_type": "episode"}
+  },
+  {
+    "input": "Dune.Part.Two.2024.2160p.WEB-DL.DDP5.1.Atmos.mkv",
+    "expected": {"title": "Dune", "year": 2024, "media_type": "movie"}
+  },
+  {
+    "input": "The.Bear.S02E06.Fishes.1080p.HULU.WEB-DL.mkv",
+    "expected": {"title": "The Bear", "season": 2, "episodes": [6], "media_type": "episode"}
+  },
+  {
+    "input": "Shogun.2024.S01E10.A.Dream.of.a.Dream.2160p.mkv",
+    "expected": {"title": "Shogun", "season": 1, "episodes": [10], "media_type": "episode"}
+  },
+  {
+    "input": "Poor Things (2023) 1080p WEB-DL.mkv",
+    "expected": {"title": "Poor Things", "year": 2023, "media_type": "movie"}
+  },
+  {
+    "input": "Fallout.S01E01.The.End.2160p.AMZN.WEB-DL.mkv",
+    "expected": {"title": "Fallout", "season": 1, "episodes": [1], "media_type": "episode"}
+  }
+]

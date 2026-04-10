@@ -271,6 +271,24 @@ def status(
 
 
 @app.command()
+def daemon(
+    config: Optional[Path] = typer.Option(None, "--config", "-c", help="Path to config file"),
+):
+    """Run as a daemon with scheduled organize and upcoming checks."""
+    from mediasorter.config import load_config
+    from mediasorter.daemon.scheduler import run_daemon
+
+    cfg = load_config(config)
+    console.print(
+        f"[bold]Starting MediaSorter daemon[/bold]\n"
+        f"  Organize schedule: {cfg.daemon.organize_cron}\n"
+        f"  Upcoming schedule: {cfg.daemon.upcoming_cron}\n"
+        f"  Health endpoint:   http://127.0.0.1:{cfg.daemon.health_port}/health"
+    )
+    run_daemon(cfg)
+
+
+@app.command()
 def rollback(
     run_id: Annotated[str, typer.Argument(help="Run ID to rollback")],
     config: Optional[Path] = typer.Option(None, "--config", "-c", help="Path to config file"),

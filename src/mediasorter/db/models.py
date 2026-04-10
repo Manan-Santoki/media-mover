@@ -65,7 +65,7 @@ class MoveLog(SQLModel, table=True):
 
     id: int | None = Field(default=None, primary_key=True)
     run_id: str = Field(index=True)
-    media_file_id: int = Field(foreign_key="media_file.id", index=True)
+    media_file_id: int | None = Field(default=None, foreign_key="media_file.id", index=True)
     source_path: str = ""
     dest_path: str = ""
     moved_at: datetime = Field(default_factory=datetime.now)

@@ -53,18 +53,12 @@ def is_sample_file(path: Path, media_type: str, min_movie_mb: int = 50, min_epis
 
 
 def is_incomplete_file(path: Path) -> bool:
-    """Check if a file appears to still be downloading."""
-    if path.suffix.lower() in INCOMPLETE_EXTENSIONS:
-        return True
+    """Check if a file appears to still be downloading.
 
-    try:
-        mtime = path.stat().st_mtime
-        if time.time() - mtime < 300:  # modified in last 5 minutes
-            return True
-    except OSError:
-        return False
-
-    return False
+    Only checks file extension (e.g., .part, .!qb). The mtime-based
+    check for recently modified files is handled separately via is_file_in_use.
+    """
+    return path.suffix.lower() in INCOMPLETE_EXTENSIONS
 
 
 def is_file_in_use(path: Path) -> bool:

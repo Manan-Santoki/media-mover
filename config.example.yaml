@@ -1,0 +1,50 @@
+roots:
+  shows: /mnt/storagebox/jellyfin/media/Shows
+  movies: /mnt/storagebox/jellyfin/media/Movies
+
+tmdb:
+  api_key: ${TMDB_API_KEY}
+  language: en-US
+  cache_ttl_days: 30
+
+openrouter:
+  api_key: ${OPENROUTER_API_KEY}
+  model: google/gemini-flash-1.5
+  max_cost_per_run_usd: 1.00
+  enabled: false
+
+matching:
+  confidence_threshold: 0.85
+  min_movie_size_mb: 50
+  min_episode_size_mb: 5
+
+moving:
+  apply: false
+  trash_dir: /mnt/storagebox/jellyfin/.mediasorter-trash
+  trash_ttl_days: 14
+
+jellyfin:
+  url: ""
+  api_key: ""
+
+webhooks:
+  pickrr:
+    url: https://pickrr.msantoki.com/api/webhook/mediasorter
+    secret: ${PICKRR_WEBHOOK_SECRET}
+    events:
+      - upcoming_episode
+      - scan_complete
+      - files_moved
+      - error
+
+notifications:
+  window_days: 3
+
+daemon:
+  organize_cron: "0 */6 * * *"
+  upcoming_cron: "0 8 * * *"
+  health_port: 9876
+
+logging:
+  level: INFO
+  file: /var/log/mediasorter/mediasorter.log

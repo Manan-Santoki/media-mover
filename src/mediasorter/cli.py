@@ -309,3 +309,134 @@ def rollback(
         console.print(f"[green]Rolled back {count} moves from run {run_id[:8]}[/green]")
     else:
         console.print(f"[yellow]No moves found for run {run_id}[/yellow]")
+
+
+# ---------------------------------------------------------------------------
+# Config subcommands
+# ---------------------------------------------------------------------------
+
+config_app = typer.Typer(name="config", help="Configuration management")
+app.add_typer(config_app)
+
+
+@config_app.command("show")
+def config_show(
+    config: Optional[Path] = typer.Option(None, "--config", "-c", help="Path to config file"),
+):
+    """Print the resolved configuration."""
+    import json as json_mod
+
+    from mediasorter.config import load_config
+
+    cfg = load_config(config)
+    console.print_json(json_mod.dumps(cfg.model_dump(), default=str, indent=2))
+
+
+@config_app.command("validate")
+def config_validate(
+    config: Optional[Path] = typer.Option(None, "--config", "-c", help="Path to config file"),
+):
+    """Validate configuration and check API keys."""
+    from mediasorter.config import find_config_file, load_config
+
+    path = find_config_file(config)
+    if path is None:
+        console.print("[red]No config file found.[/red]")
+        console.print("Run [bold]mediasorter init[/bold] to create one.")
+        raise typer.Exit(1)
+
+    try:
+        cfg = load_config(config)
+        console.print(f"[green]Config loaded from {path}[/green]")
+    except Exception as e:
+        console.print(f"[red]Config validation failed: {e}[/red]")
+        raise typer.Exit(1)
+
+    # Check API keys
+    checks = [
+        ("TMDB API key", bool(cfg.tmdb.api_key)),
+        ("Shows root exists", cfg.roots.shows.exists()),
+        ("Movies root exists", cfg.roots.movies.exists()),
+    ]
+
+    if cfg.openrouter.enabled:
+        checks.append(("OpenRouter API key", bool(cfg.openrouter.api_key)))
+
+    if cfg.jellyfin.url:
+        checks.append(("Jellyfin API key", bool(cfg.jellyfin.api_key)))
+
+    for name, ok in checks:
+        status = "[green]OK[/green]" if ok else "[red]MISSING[/red]"
+        console.print(f"  {name}: {status}")
+
+
+# ---------------------------------------------------------------------------
+# Additional commands
+# ---------------------------------------------------------------------------
+
+
+@app.command()
+def organize(
+    config: Optional[Path] = typer.Option(None, "--config", "-c", help="Path to config file"),
+    apply: bool = typer.Option(False, "--apply", help="Actually move files"),
+    yes: bool = typer.Option(False, "--yes", "-y", help="Skip confirmation"),
+    verbose: bool = typer.Option(False, "--verbose", "-v"),
+    json_output: bool = typer.Option(False, "--json"),
+):
+    """Scan configured roots and organize media (shortcut for scan on all roots)."""
+    from mediasorter.config import load_config
+
+    cfg = load_config(config)
+
+    # Scan both roots
+    for root in [cfg.roots.shows, cfg.roots.movies]:
+        if root.exists():
+            console.print(f"\n[bold]Scanning {root}...[/bold]")
+            # Delegate to scan logic
+            from typer.testing import CliRunner
+
+            args = [str(root)]
+            if apply:
+                args.append("--apply")
+            if yes:
+                args.append("--yes")
+            if verbose:
+                args.append("--verbose")
+            if json_output:
+                args.append("--json")
+            if config:
+                args.extend(["--config", str(config)])
+
+            # Re-invoke scan command
+            from click import Context
+
+            ctx = typer.Context(scan)
+            scan.callback(
+                root=root,
+                apply=apply,
+                media_type="both",
+                since=None,
+                config=config,
+                log_level="DEBUG" if verbose else "INFO",
+                verbose=verbose,
+                quiet=False,
+                json_output=json_output,
+                yes=yes,
+                confidence_threshold=None,
+            )
+        else:
+            console.print(f"[yellow]Root {root} does not exist, skipping.[/yellow]")
+
+
+@app.command()
+def review(
+    config: Optional[Path] = typer.Option(None, "--config", "-c", help="Path to config file"),
+    threshold: float = typer.Option(0.85, "--threshold", help="Confidence threshold for review"),
+):
+    """Interactive TUI for reviewing low-confidence matches."""
+    from mediasorter.db.engine import create_tables, get_engine
+    from mediasorter.tui.review import review_matches
+
+    engine = get_engine()
+    create_tables(engine)
+    review_matches(engine, threshold=threshold)

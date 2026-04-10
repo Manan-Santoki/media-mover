@@ -1,0 +1,26 @@
+services:
+  mediasorter:
+    build: .
+    container_name: mediasorter
+    restart: unless-stopped
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - mediasorter-state:/root/.local/state/mediasorter
+      - mediasorter-logs:/var/log/mediasorter
+      # Mount the media library
+      - /mnt/storagebox/jellyfin/media:/mnt/storagebox/jellyfin/media
+    environment:
+      - TMDB_API_KEY=${TMDB_API_KEY}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - PICKRR_WEBHOOK_SECRET=${PICKRR_WEBHOOK_SECRET}
+    ports:
+      - "9876:9876"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:9876/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  mediasorter-state:
+  mediasorter-logs:

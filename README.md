@@ -39,18 +39,22 @@ Movies/
 
 ## Installation
 
-### From source (recommended for development)
+### From source with uv (recommended)
 
 ```bash
-git clone https://github.com/yourusername/media-mover.git
+git clone https://github.com/Manan-Santoki/media-mover.git
 cd media-mover
-pip install -e ".[dev]"
+uv sync --all-extras   # installs everything including dev deps
+uv run mediasorter --help
 ```
 
-### With uv
+### From source with pip
 
 ```bash
-uv tool install mediasorter
+git clone https://github.com/Manan-Santoki/media-mover.git
+cd media-mover
+python3 -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
 ```
 
 ### Docker

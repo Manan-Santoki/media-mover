@@ -7,7 +7,7 @@ name = "mediasorter"
 version = "0.1.0"
 description = "Organize a Jellyfin media library into canonical folder structure using TMDB metadata"
 requires-python = ">=3.11"
-license = "MIT"
+license = {text = "MIT"}
 dependencies = [
     "typer>=0.12,<1",
     "rich>=13",

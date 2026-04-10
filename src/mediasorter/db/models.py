@@ -26,8 +26,8 @@ class MediaFile(SQLModel, table=True):
     file_hash: str | None = None
     media_type: str = ""  # "movie" | "episode"
     run_id: str | None = Field(default=None, index=True)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
 
 
 class ParseResult(SQLModel, table=True):
@@ -68,7 +68,7 @@ class MoveLog(SQLModel, table=True):
     media_file_id: int = Field(foreign_key="media_file.id", index=True)
     source_path: str = ""
     dest_path: str = ""
-    moved_at: datetime = Field(default_factory=datetime.utcnow)
+    moved_at: datetime = Field(default_factory=datetime.now)
     rolled_back: bool = False
     error: str | None = None
 
@@ -79,7 +79,7 @@ class TMDBCache(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     cache_key: str = Field(index=True, unique=True)
     response_json: str = "{}"
-    fetched_at: datetime = Field(default_factory=datetime.utcnow)
+    fetched_at: datetime = Field(default_factory=datetime.now)
 
 
 class UpcomingEpisode(SQLModel, table=True):
@@ -101,7 +101,7 @@ class RunLog(SQLModel, table=True):
 
     id: int | None = Field(default=None, primary_key=True)
     run_id: str = Field(index=True, unique=True)
-    started_at: datetime = Field(default_factory=datetime.utcnow)
+    started_at: datetime = Field(default_factory=datetime.now)
     finished_at: datetime | None = None
     files_scanned: int = 0
     files_matched: int = 0
